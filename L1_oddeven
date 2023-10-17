@@ -1,0 +1,56 @@
+
+; oddeven - checks # stored in memory location 1000H and determines whether it is even/odd
+;           if even, display 8 0s from 1001H-1008H; otherwise, display 1s instead
+
+jmp start
+
+;data
+
+;code
+start: nop
+
+LDA 1000H
+MVI B, 2
+MVI C, 1
+MVI D, 0
+
+MVI H, 10H
+MVI L, 01H 
+
+MVI E, 08H
+
+LABEL1: SUB B
+
+CMP C ; if A == 1, jump to LABEL3
+JZ LABEL3
+
+CMP D ; if A == 0, jump to LABEL2
+JZ LABEL2 
+
+JMP LABEL1
+
+LABEL2: MOV A, L ; for even
+MOV M, D
+
+LABEL2A: ADD C
+MOV L, A
+MOV M, D
+
+CMP E; jump to LABEL DONE if A = 08H
+JZ DONE
+
+JMP LABEL2A
+
+LABEL3: MOV A, L ; for odd
+MOV M, C
+
+LABEL3A: ADD C
+MOV L, A
+MOV M, C
+
+CMP E
+JZ DONE
+
+JMP LABEL3A
+
+DONE: hlt
