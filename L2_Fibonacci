@@ -1,0 +1,71 @@
+; fibonacci - Calculates for the nth term of the fibonacci sequence.
+;             n is stored in the memory address 1000H
+
+; fibonacci sequence: 1, 1, 2, 3, 5, 8, etc.
+
+jmp start
+
+;data
+
+;code
+start: nop
+
+; Initializing Registers
+LDA 1000H ; A = 1000H
+
+MVI B, 0 ; to check for A
+
+MVI C, 1 ; old element
+MVI D, 1 ; old old element
+
+MVI E, 2 ; result in here
+
+MVI H, 0 ; to keep track of loop
+
+; Main Code
+CMP B ; if n = 0, output 0 then end
+JZ DONE
+
+CMP C ; if n = 1, output 1 then end
+JZ N_ONE
+
+; if n = 2, output 1 then end
+CMP E
+JZ N_TWO
+
+; if n > 3, calculate
+MVI E, 0
+
+CALCULATE: MOV H, A ; move counter to H for now
+MVI A, 0 
+
+; fibonacci sequence: 1, 1, 2, 3, 5, 8, etc.
+
+ADD C
+ADD D
+MOV D, C
+MOV C, A
+
+MOV E, A
+MOV A, H
+
+DCR A
+CMP B
+
+; if (A == 0) --> display and done
+JZ CALCULATE_DONE
+
+JMP CALCULATE
+
+N_ONE: STA 1001H
+JMP DONE
+
+N_TWO: MOV A, C
+STA 1001H
+JMP DONE
+
+CALCULATE_DONE: MOV A,E
+STA 1001H
+JMP DONE
+
+DONE: hlt
