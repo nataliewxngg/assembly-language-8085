@@ -1,0 +1,28 @@
+
+; smallest - Compares 2 numbers in the memory locations 1000H and 1001H, 
+;            and display the bigger # in 1002H
+
+jmp start
+
+;data
+
+;code
+start: nop
+
+LDA 1001H
+MVI B, 0
+MOV B, A ; B - 1001H
+LDA 1000H ; A - 1000H
+
+; Compare 
+CMP B ; CMP 1000H, 1001H 
+
+; if A>B or A==B
+JNC DONE
+
+; if A<B - carry flag is set to 1
+JC ALESS
+ALESS: MOV A,B
+
+DONE: STA 1002H 
+hlt
