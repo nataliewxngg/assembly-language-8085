@@ -1,0 +1,38 @@
+; sum5 - Stores the sum of 1000H-1004H (ie.1000H+1001H+1002H+1003H+1004H) into 1005H
+
+jmp start
+
+;data
+
+;code
+start: nop
+
+; Initializing registers
+LDA 1004H
+MOV E, A
+
+LDA 1003H
+MOV D, A
+
+LDA 1002H
+MOV C, A
+
+LDA 1001H
+MOV B, A
+
+LDA 1000H
+
+; A - 1000H
+; B - 1001H
+; C - 1002H
+; D - 1003H
+; E - 1004H
+
+ADD B
+ADD C
+ADD D
+ADD E
+
+STA 1005H
+
+hlt
