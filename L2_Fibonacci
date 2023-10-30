@@ -21,9 +21,10 @@ MVI D, 1 ; old old element
 MVI E, 2 ; result in here
 
 MVI H, 0 ; to keep track of loop
+MVI L, 03H
 
 ; Main Code
-CMP B ; if n = 0, output 0 then end
+CMP B ; if n = 0, end
 JZ DONE
 
 CMP C ; if n = 1, output 1 then end
@@ -34,7 +35,13 @@ CMP E
 JZ N_TWO
 
 ; if n > 3, calculate
+MVI A, 1
+STA 1001H
+STA 1002H
+LDA 1000H
+
 MVI E, 0
+SUI 2 ; A-2 (eg. if 3 --> start at 1)
 
 CALCULATE: MOV H, A ; move counter to H for now
 MVI A, 0 
@@ -55,6 +62,18 @@ CMP B
 ; if (A == 0) --> display and done
 JZ CALCULATE_DONE
 
+MOV B, A
+
+MVI H, 10H
+MOV M, E
+
+MOV A, L
+ADI 1
+MOV L, A
+
+MOV A, B
+MVI B, 0
+
 JMP CALCULATE
 
 N_ONE: STA 1001H
@@ -62,10 +81,11 @@ JMP DONE
 
 N_TWO: MOV A, C
 STA 1001H
+STA 1002H
 JMP DONE
 
-CALCULATE_DONE: MOV A,E
-STA 1001H
+CALCULATE_DONE: MVI H, 10H
+MOV M, E
 JMP DONE
 
 DONE: hlt

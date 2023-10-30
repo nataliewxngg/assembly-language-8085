@@ -1,0 +1,20 @@
+
+; switchnibbles - takes an 8-bit number from 1000H and reverses its nibbles
+;           	  eg. 10110110 --> 01101011
+
+jmp start
+
+;data
+
+;code
+start: nop
+
+LDA 1000H ; A = 8-bit #
+RLC
+RLC
+RLC
+RLC
+
+STA 1001H ; Displays results in memeory address 1001H
+
+hlt
