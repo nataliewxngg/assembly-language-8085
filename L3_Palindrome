@@ -1,0 +1,54 @@
+
+; palindrome - stores FF in 1001H if 1000H's binary # is a palindrome, 00 otherwise
+
+jmp start
+
+;data
+
+;code
+start: nop
+
+LDA 1000H ; for rotate left
+MVI C, 5 ; counter
+MOV B, A ; for rotate right
+
+MOV H, A ; to store A
+
+LOOP: MVI D, 0
+MOV A, H 
+RLC
+MOV H, A ; store A back into H
+MOV A, B
+
+MVI D, 0
+JC CARRYFLAG1D ; stores carry flag from moving left
+CONTINUE: RRC
+
+MOV B, A ; store B back into B
+
+MVI A, 0 
+JC CARRYFLAG1A
+CONTINUE1: CMP D ; compares 2 carry flags
+JNZ NOTPALINDROME 
+
+DCR C ; C = C-1
+MVI A, 0
+CMP C
+
+JZ PALINDROME ; if C = 0
+JMP LOOP
+
+CARRYFLAG1D: MVI D, 1
+JMP CONTINUE
+
+CARRYFLAG1A: MVI A, 1
+JMP CONTINUE1
+
+NOTPALINDROME: MVI A, 0
+STA 1001H
+JMP DONE
+
+PALINDROME: MVI A, 255
+STA 1001H
+
+DONE: hlt
