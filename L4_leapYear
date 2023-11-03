@@ -1,0 +1,48 @@
+
+; leapyear - retrieves a year from 3000H and 3001H (year separated) and determines if it is 
+;            a leap year
+;            if so, set register B to 1; otherwise, set register B to 0
+
+jmp start
+
+;data
+
+;code
+start: nop
+
+; leap years are divisible by 4
+; century leap years are divisible by 400 (3001H is 0 for century years)
+
+LDA 3001H
+MVI B, 0
+MVI C, 4
+
+CMP B
+JZ CENTURY
+
+; check if divisible by 4
+DIVBY4: CMP C
+JC NOTLEAPYEAR
+
+SUI 4
+CMP B
+JZ LEAPYEAR
+
+JMP DIVBY4
+
+; checks if divisible by 400
+CENTURY: LDA 3000H
+CENTURYLOOP: CMP C
+JC NOTLEAPYEAR
+
+SUI 4
+CMP B
+JZ LEAPYEAR
+
+JMP CENTURYLOOP
+
+LEAPYEAR: MVI B, 1
+JMP DONE
+NOTLEAPYEAR: MVI B, 0
+
+DONE: hlt
