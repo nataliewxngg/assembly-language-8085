@@ -1,0 +1,52 @@
+
+; prime - determines if a # stored in memory location 1000H is a prime #
+;         display 1 in 1001H if so, and 0 in 1001H if not
+
+jmp start
+
+;data
+
+;code
+start: nop
+
+LDA 1000H
+MVI B, 0
+MVI C, 1
+
+; base case - checks if # is 0 or 1 first
+CMP B
+JZ NOTPRIME ; if 0
+
+INR B
+CMP B
+JZ NOTPRIME ; if 1
+
+; for every other #
+MOV B, A
+
+DIVISOR: DCR B
+
+; make sure B is not 1
+MOV A, B
+CMP C
+JZ PRIME
+
+LDA 1000H
+
+SUBUNTILNOMORE: CMP B
+JC DIVISOR
+
+SUB B
+CMP B
+JZ NOTPRIME
+
+JMP SUBUNTILNOMORE
+
+NOTPRIME: MVI A, 0
+STA 1001H
+JMP DONE
+
+PRIME: MVI A, 1
+STA 1001H
+
+DONE: hlt
