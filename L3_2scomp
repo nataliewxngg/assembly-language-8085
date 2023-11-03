@@ -1,0 +1,32 @@
+
+; 2scomp - if a # stored in 1000H is in 2's complement, convert it to positive and store it
+;          into memory address 1001H
+
+jmp start
+
+;data
+
+;code
+start: nop
+
+LDA 1000H ; A = 1000H
+RLC 
+
+JC TWOSCOMP ; if signed flag is 1, go into TWOSCOMP
+JMP NOT ; if signed flag is NOT 1, terminate
+
+NOT: MVI A, 0
+STA 1001H
+JMP DONE
+
+; convert hereeeeee - to flip the bits, subtract from 1111 1111
+TWOSCOMP: LDA 1000H 
+MOV B, A
+MVI A, 255
+
+SUB B ; bits are flipped!!!
+INR A
+
+STA 1001H
+
+DONE: hlt
